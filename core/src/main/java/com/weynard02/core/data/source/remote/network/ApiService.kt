@@ -3,7 +3,6 @@ package com.weynard02.core.data.source.remote.network
 import com.weynard02.core.BuildConfig
 import com.weynard02.core.data.source.remote.response.ListGameResponse
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
