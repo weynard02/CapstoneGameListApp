@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weynard02.capstonegamelistapp.detail.DetailActivity
 import com.weynard02.core.ui.GameAdapter
@@ -41,8 +42,10 @@ class FavoriteActivity : AppCompatActivity() {
         }
 
         viewModel.favoriteGame.observe(this) { dataGame ->
-            gameAdapter.setData(dataGame)
-            binding.viewEmpty.visibility = if (dataGame.isNotEmpty()) View.GONE else View.VISIBLE
+            gameAdapter.submitList(dataGame)
+
+            // Di sini error, tapi pada build berjalan lancar
+            binding.viewEmpty.isVisible = dataGame.isEmpty()
         }
 
 

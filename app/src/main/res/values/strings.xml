@@ -15,5 +15,6 @@
     <string name="playtime_data">Playtime: %1$s</string>
     <string name="released_date">Released Date: %1$s</string>
     <string name="favorite_button">Favorite Button</string>
-    <string name="searchbar_hint">Search game...</string>
+    <string name="searchbar_hint">Search game…</string>
+    <string name="background_image">Background Image</string>
 </resources>

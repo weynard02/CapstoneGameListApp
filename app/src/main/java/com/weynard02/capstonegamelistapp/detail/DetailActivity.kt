@@ -46,11 +46,12 @@ class DetailActivity : AppCompatActivity() {
                 setFavorite(isFavorite)
                 fab.setOnClickListener {
                     isFavorite = !isFavorite
-                    if (isFavorite) {
-                        Toast.makeText(this@DetailActivity, "Favorite game added!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@DetailActivity, "Favorite game removed!", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(this@DetailActivity,
+                        if (isFavorite)
+                            "Favorite game added!"
+                        else
+                            "Favorite game removed!",
+                        Toast.LENGTH_SHORT).show()
                     viewModel.setFavoriteGame(detailGame, isFavorite)
                     setFavorite(isFavorite)
                 }
@@ -60,10 +61,14 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setFavorite(state: Boolean) {
-        if (state) {
-            binding.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_favorite_24))
-        } else {
-            binding.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_favorite_border_24))
-        }
+        binding.fab.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                if (state)
+                    R.drawable.baseline_favorite_24
+                else
+                    R.drawable.baseline_favorite_border_24
+            )
+        )
     }
 }

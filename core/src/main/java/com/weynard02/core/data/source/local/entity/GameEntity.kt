@@ -1,6 +1,5 @@
 package com.weynard02.core.data.source.local.entity
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,7 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "game")
 data class GameEntity(
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "id")
     var id: Int,
 

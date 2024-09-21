@@ -56,9 +56,9 @@ class HomeFragment : Fragment() {
                 when (game) {
                     is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is Resource.Success -> {
-                        gameAdapter.setData(null)
+                        gameAdapter.submitList(null)
                         binding.progressBar.visibility = View.GONE
-                        gameAdapter.setData(game.data)
+                        gameAdapter.submitList(game.data)
                     }
                     is Resource.Error -> {
                         binding.progressBar.visibility = View.GONE
@@ -84,9 +84,9 @@ class HomeFragment : Fragment() {
                             when (game) {
                                 is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                                 is Resource.Success -> {
-                                    gameAdapter.setData(null)
+                                    gameAdapter.submitList(null)
                                     binding.progressBar.visibility = View.GONE
-                                    gameAdapter.setData(game.data)
+                                    gameAdapter.submitList(game.data)
                                 }
                                 is Resource.Error -> {
                                     binding.progressBar.visibility = View.GONE
