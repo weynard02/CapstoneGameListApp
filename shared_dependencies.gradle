@@ -20,4 +20,6 @@ dependencies {
     implementation libs.koin.androidx.navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    debugImplementation(libs.leakcanary.android)
 }
