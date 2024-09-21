@@ -15,12 +15,12 @@ jobs:
           command: |
             sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C0BA5CE6DC6315A3
       - run:
-          name: Add Java 17 repository
+          name: Add AdoptOpenJDK repository
           command: |
             sudo apt-get update
-            sudo apt-get install -y wget
-            sudo wget -O - https://packages.sury.org/java/apt.gpg | sudo apt-key add -
-            echo "deb https://packages.sury.org/java/ buster main" | sudo tee /etc/apt/sources.list.d/java.list
+            sudo apt-get install -y wget apt-transport-https gnupg
+            wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+            echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ buster main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
             sudo apt-get update
       - run:
           name: Install Java 17
