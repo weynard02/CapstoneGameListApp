@@ -11,6 +11,10 @@ jobs:
       - restore_cache:
           key: android-orb-v1-
       - run:
+          name: Add Google Cloud SDK public key
+          command: |
+            sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C0BA5CE6DC6315A3
+      - run:
           name: Add Java 17 repository
           command: |
             sudo apt-get update
