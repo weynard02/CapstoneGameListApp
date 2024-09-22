@@ -48,6 +48,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+      - run:
           name: Run Tests with Coverage
           command: ./gradlew testDebugUnitTest --coverage
       - store_artifacts:
@@ -61,6 +64,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+      - run:
           name: Check Code Style
           command: ./gradlew checkstyle
       - store_artifacts:
@@ -73,6 +79,9 @@ jobs:
     executor: android/android
     steps:
       - checkout
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
       - run:
           name: Run Vulnerability Analysis
           command: ./gradlew dependencyCheckAnalyze
