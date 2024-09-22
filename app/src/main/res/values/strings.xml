@@ -1,14 +1,8 @@
 <resources>
     <string name="app_name">Capstone Game List App</string>
     <string name="title_favorite">Favorite</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="something_wrong">Something went wrong!</string>
     <string name="no_data">No data available</string>
-    <string name="games_name">Game Title</string>
-    <string name="playtime">Playtime</string>
-    <string name="rating">rating</string>
-    <string name="release_date">Release Date</string>
     <string name="favorite">Favorite</string>
     <string name="home">Home</string>
     <string name="rating_data">Rating: %1$s</string>

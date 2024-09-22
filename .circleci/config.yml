@@ -52,7 +52,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Run Tests with Coverage
-          command: ./gradlew testDebugUnitTest --coverage
+          command: ./gradlew testDebugUnitTest
       - store_artifacts:
           path: app/build/reports/coverage
           destination: coverage-reports
@@ -68,7 +68,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Check Code Style
-          command: ./gradlew checkstyle
+          command: ./gradlew ktlintCheck
       - store_artifacts:
           path: app/build/reports/checkstyle
           destination: checkstyle-reports

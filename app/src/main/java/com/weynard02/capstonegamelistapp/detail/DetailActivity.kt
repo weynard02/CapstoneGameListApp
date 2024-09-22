@@ -46,17 +46,18 @@ class DetailActivity : AppCompatActivity() {
                 setFavorite(isFavorite)
                 fab.setOnClickListener {
                     isFavorite = !isFavorite
-                    Toast.makeText(this@DetailActivity,
+                    Toast.makeText(
+                        this@DetailActivity,
                         if (isFavorite)
                             "Favorite game added!"
                         else
                             "Favorite game removed!",
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT
+                    ).show()
                     viewModel.setFavoriteGame(detailGame, isFavorite)
                     setFavorite(isFavorite)
                 }
             }
-
         }
     }
 

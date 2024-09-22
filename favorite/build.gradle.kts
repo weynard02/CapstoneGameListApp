@@ -36,7 +36,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":app"))
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.appcompat.v161)
+    implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
 

@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("jacoco")
     id("checkstyle")
+    id("org.jlleitschuh.gradle.ktlint")
     id("org.owasp.dependencycheck")
 }
 
@@ -25,8 +25,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     }
-
-
 
     buildTypes {
         release {
@@ -79,12 +77,25 @@ tasks.withType<JacocoReport> {
     executionData.setFrom(fileTree(mapOf("dir" to "$buildDir", "includes" to "jacoco/testDebugUnitTest.exec")))
 }
 
+ktlint {
+    version.set("0.45.2")
+    android.set(true)
+}
+
+
 checkstyle {
     toolVersion = "10.3.3"
     configFile = file("config/checkstyle/checkstyle.xml")
+
 }
 
-tasks.withType<Checkstyle> {
+
+
+tasks.withType<Checkstyle>{
+    source = fileTree("src/main/java").apply {
+        include("**/*.java")
+    }
+    include("**/*.kt")
     reports {
         xml.required.set(false)
         html.required.set(true)
@@ -92,7 +103,7 @@ tasks.withType<Checkstyle> {
 }
 
 dependencyCheck {
-    failBuildOnCVSS = 0f
+    failBuildOnCVSS = 7f
 }
 
 
@@ -100,7 +111,7 @@ dependencyCheck {
 dependencies {
 
     implementation(project(":core"))
-    implementation(libs.androidx.appcompat.v161)
+    implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
