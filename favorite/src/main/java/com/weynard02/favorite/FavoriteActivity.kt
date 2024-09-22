@@ -43,7 +43,7 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel.favoriteGame.observe(this) { dataGame ->
             gameAdapter.submitList(dataGame)
 
-            // Di sini error, tapi pada build berjalan lancar
+            // Di sini mungkin error, tapi pada build berjalan lancar
             binding.viewEmpty.isVisible = dataGame.isEmpty()
         }
 
