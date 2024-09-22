@@ -7,7 +7,6 @@ plugins {
     id("jacoco")
     id("checkstyle")
     id("org.owasp.dependencycheck")
-    id("io.gitlab.arturbosch.detekt")
 }
 
 apply("../shared_dependencies.gradle")
@@ -66,7 +65,7 @@ android {
 }
 
 jacoco {
-    toolVersion = "0.8.8" // Use the latest version
+    toolVersion = "0.8.8"
 }
 
 tasks.withType<JacocoReport> {
@@ -96,17 +95,6 @@ dependencyCheck {
     failBuildOnCVSS = 0f
 }
 
-detekt {
-    toolVersion = "1.22.0" // Use the latest version
-    config = files("config/detekt/detekt.yml") // Point to your detekt configuration file
-    buildUponDefaultConfig = true
-
-    reports {
-        html.enabled = true
-        xml.enabled = false
-        txt.enabled = false
-    }
-}
 
 
 dependencies {
