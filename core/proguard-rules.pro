@@ -121,3 +121,5 @@ public *;
 
 -keep class com.weynard02.core.ui.** { *; }
 -keepclassmembers class com.weynard02.core.ui.** { *; }
+
+-keep class androidx.viewbinding.** { *; }
