@@ -1,8 +1,8 @@
 version: 2.1
- 
+
 orbs:
   android: circleci/android@0.2.1
- 
+
 jobs:
   build:
     docker:
@@ -40,3 +40,57 @@ jobs:
       - store_artifacts:  
           path: app/build/outputs/apk/debug/
           destination: artifact-file
+
+  code_coverage:
+    docker:
+      - image: cimg/android:2024.09
+    executor: android/android
+    steps:
+      - checkout
+      - run:
+          name: Run Tests with Coverage
+          command: ./gradlew testDebugUnitTest --coverage
+      - store_artifacts:
+          path: app/build/reports/coverage
+          destination: coverage-reports
+
+  check_style:
+    docker:
+      - image: cimg/android:2024.09
+    executor: android/android
+    steps:
+      - checkout
+      - run:
+          name: Check Code Style
+          command: ./gradlew checkstyle
+      - store_artifacts:
+          path: app/build/reports/checkstyle
+          destination: checkstyle-reports
+
+  vulnerability_analysis:
+    docker:
+      - image: cimg/android:2024.09
+    executor: android/android
+    steps:
+      - checkout
+      - run:
+          name: Run Vulnerability Analysis
+          command: ./gradlew dependencyCheckAnalyze
+      - store_artifacts:
+          path: app/build/reports/dependency-check-report
+          destination: vulnerability-reports
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - code_coverage:
+          requires:
+            - build
+      - check_style:
+          requires:
+            - build
+      - vulnerability_analysis:
+          requires:
+            - build
