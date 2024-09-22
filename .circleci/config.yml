@@ -51,6 +51,9 @@ jobs:
           path: app/build/outputs/apk/debug/
           destination: artifact-file
       - run:
+          name: List Project Files
+          command: ls -la  # Memeriksa file yang ada di direktori
+      - run:
           name: Install Node.js Dependencies
           command: npm install
       # Code style
