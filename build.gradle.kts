@@ -8,7 +8,7 @@ plugins {
     id("jacoco")
     id("checkstyle")
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
-    id("org.owasp.dependencycheck") version "10.0.4" apply false
+    id("org.owasp.dependencycheck") version "8.4.0" apply false
 }
 
 ktlint {
@@ -46,3 +46,4 @@ tasks.withType<Checkstyle> {
         html.required.set(true)
     }
 }
+
