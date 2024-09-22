@@ -7,8 +7,7 @@ jobs:
   build:
     docker:
       - image: cimg/android:2024.09
-      - image: circleci/node:latest
-    executor: android/android
+      - image: circleci/python:3.8  # Ganti dengan image yang sesuai
     steps:
       - checkout
       - restore_cache:
@@ -16,6 +15,16 @@ jobs:
       - run:
           name: Verify Java Version
           command: java -version
+      - run:
+          name: Install Node.js
+          command: |
+            curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+      - run:
+          name: Verify Node.js and npm Versions
+          command: |
+            node -v
+            npm -v
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
