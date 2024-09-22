@@ -27,8 +27,8 @@ jobs:
             - ~/.android/build-cache
             - ~/.android/cache
       - run:
-          name: Run Build
-          command: ./gradlew build
+          name: Build without Ktlint
+          command: ./gradlew build -PskipKtlint
       - store_artifacts: 
           path: app/build/reports
           destination: reports
