@@ -33,6 +33,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 
     compileOptions {
@@ -70,7 +77,7 @@ tasks.withType<JacocoReport> {
     }
     sourceDirectories.setFrom(files("src/main/java"))
     classDirectories.setFrom(files("build/tmp/kotlin-classes/debug")) // Or your class directory
-    executionData.setFrom(fileTree(mapOf("dir" to "$buildDir", "includes" to "jacoco/testDebugUnitTest.exec")))
+    executionData.setFrom(fileTree(mapOf("dir" to "${layout.buildDirectory}", "includes" to "jacoco/testDebugUnitTest.exec")))
 }
 
 ktlint {
