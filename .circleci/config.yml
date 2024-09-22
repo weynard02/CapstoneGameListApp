@@ -1,12 +1,13 @@
 version: 2.1
- 
+
 orbs:
   android: circleci/android@0.2.1
- 
+
 jobs:
   build:
     docker:
       - image: cimg/android:2024.09
+      - image: circleci/node:latest
     executor: android/android
     steps:
       - checkout
@@ -40,3 +41,27 @@ jobs:
       - store_artifacts:  
           path: app/build/outputs/apk/debug/
           destination: artifact-file
+      - run:
+          name: Install Node.js Dependencies
+          command: npm install
+      # Code style
+      - run:
+          name: Run Lint Style
+          command: npm run lint
+      # Code coverage
+      - run:
+          name: Run Tests Coverage
+          command: npm test -- --coverage
+      # Vulnerability 
+      - run:
+          name: Install Snyk
+          command: npm install -g snyk
+      - run:
+          name: Run Snyk Test Vulnerability 
+          command: snyk test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
