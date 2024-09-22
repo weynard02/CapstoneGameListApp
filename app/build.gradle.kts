@@ -1,8 +1,14 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    id("jacoco")
+    id("checkstyle")
+    id("org.owasp.dependencycheck")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 apply("../shared_dependencies.gradle")
@@ -22,6 +28,8 @@ android {
 
     }
 
+
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -30,13 +38,13 @@ android {
                 "proguard-rules.pro"
             )
         }
-        debug {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+//        debug {
+//            isMinifyEnabled = true
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
+//        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -58,6 +66,48 @@ android {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.8" // Use the latest version
+}
+
+tasks.withType<JacocoReport> {
+    dependsOn("testDebugUnitTest")
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    sourceDirectories.setFrom(files("src/main/java"))
+    classDirectories.setFrom(files("build/tmp/kotlin-classes/debug")) // Or your class directory
+    executionData.setFrom(fileTree(mapOf("dir" to "$buildDir", "includes" to "jacoco/testDebugUnitTest.exec")))
+}
+
+checkstyle {
+    toolVersion = "10.3.3"
+    configFile = file("config/checkstyle/checkstyle.xml")
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 0f
+}
+
+detekt {
+    toolVersion = "1.22.0" // Use the latest version
+    config = files("config/detekt/detekt.yml") // Point to your detekt configuration file
+    buildUponDefaultConfig = true
+
+    reports {
+        html.enabled = true
+        xml.enabled = false
+        txt.enabled = false
+    }
+}
 
 
 dependencies {
