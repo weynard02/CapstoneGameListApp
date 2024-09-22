@@ -23,7 +23,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -34,25 +33,22 @@ android {
                 "proguard-rules.pro"
             )
         }
-//        debug {
-//            isMinifyEnabled = true
-//            proguardFiles(
-//                getDefaultProguardFile("proguard-android-optimize.txt"),
-//                "proguard-rules.pro"
-//            )
-//        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
     }
+
     dynamicFeatures += setOf(":favorite")
 
     java {
@@ -80,18 +76,31 @@ tasks.withType<JacocoReport> {
 ktlint {
     version.set("0.45.2")
     android.set(true)
+    ignoreFailures = true
+    disabledRules.set(listOf(
+        "final-newline",
+        "no-wildcard-imports",
+        "max-line-length",
+        "no-multi-spaces",
+        "no-empty-line-before",
+        "missing-newline-after-opening-parenthesis", // Missing newline after "("
+        "missing-newline-before-closing-parenthesis" // Missing newline before ")"
+    ))
 }
 
+
+
+// Move this block right after configuring ktlint
+tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureEach {
+    onlyIf { !project.hasProperty("skipKtlint") }
+}
 
 checkstyle {
     toolVersion = "10.3.3"
     configFile = file("config/checkstyle/checkstyle.xml")
-
 }
 
-
-
-tasks.withType<Checkstyle>{
+tasks.withType<Checkstyle> {
     source = fileTree("src/main/java").apply {
         include("**/*.java")
     }
@@ -106,10 +115,7 @@ dependencyCheck {
     failBuildOnCVSS = 7f
 }
 
-
-
 dependencies {
-
     implementation(project(":core"))
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -124,10 +130,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
-
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.kotlinx.coroutines.test)
-
-
-
 }

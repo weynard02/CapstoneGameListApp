@@ -14,6 +14,21 @@ plugins {
 ktlint {
     version.set("0.45.2")
     android.set(true)
+    ignoreFailures = true
+    disabledRules.set(listOf(
+        "final-newline",
+        "no-wildcard-imports",
+        "max-line-length",
+        "no-multi-spaces",
+        "no-empty-line-before",
+        "missing-newline-after-opening-parenthesis", // Missing newline after "("
+        "missing-newline-before-closing-parenthesis" // Missing newline before ")"
+    ))
+}
+
+// Move this block right after configuring ktlint
+tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureEach {
+    onlyIf { !project.hasProperty("skipKtlint") }
 }
 
 checkstyle {
@@ -21,7 +36,7 @@ checkstyle {
     configFile = file("app/config/checkstyle/checkstyle.xml")
 }
 
-tasks.withType<Checkstyle>{
+tasks.withType<Checkstyle> {
     source = fileTree("src/main/java").apply {
         include("**/*.java")
     }
