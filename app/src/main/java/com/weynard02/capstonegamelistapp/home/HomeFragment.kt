@@ -2,6 +2,7 @@ package com.weynard02.capstonegamelistapp.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
+    companion object {
+        const val KEY_RECYCLER_STATE = "key_recycler_state"
+    }
+
     private val viewModel: HomeViewModel by viewModel()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private var recyclerState: Parcelable? = null
+
+    private var isSearch = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,11 +40,28 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_RECYCLER_STATE, binding.rvGame.layoutManager?.onSaveInstanceState())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            recyclerState = savedInstanceState.getParcelable(KEY_RECYCLER_STATE)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
             setupAdapter()
+        }
+
+        if (recyclerState != null) {
+            binding.rvGame.layoutManager?.onRestoreInstanceState(recyclerState)
+            recyclerState = null
         }
 
     }
@@ -52,7 +78,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.games.observe(viewLifecycleOwner) { game ->
-            if (game != null) {
+            if (game != null && !isSearch) {
                 when (game) {
                     is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                     is Resource.Success -> {
@@ -79,23 +105,32 @@ class HomeFragment : Fragment() {
 
                     val query: String = searchView.text.toString()
 
-                    viewModel.searchGame(query).observe(viewLifecycleOwner) { game ->
-                        if (game != null) {
-                            when (game) {
-                                is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                                is Resource.Success -> {
-                                    gameAdapter.submitList(null)
-                                    binding.progressBar.visibility = View.GONE
-                                    gameAdapter.submitList(game.data)
+                    if (query == "") {
+                        isSearch = false
+                    }
+                    else {
+                        viewModel.searchGame(query).observe(viewLifecycleOwner) { game ->
+                            isSearch = true
+                            if (game != null) {
+                                when (game) {
+                                    is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                                    is Resource.Success -> {
+                                        gameAdapter.submitList(null)
+                                        binding.progressBar.visibility = View.GONE
+                                        gameAdapter.submitList(game.data)
+                                    }
+                                    is Resource.Error -> {
+                                        binding.progressBar.visibility = View.GONE
+                                        binding.viewError.root.visibility = View.VISIBLE
+                                        binding.viewError.tvError.text = game.message ?: getString(R.string.something_wrong)
+                                    }
                                 }
-                                is Resource.Error -> {
-                                    binding.progressBar.visibility = View.GONE
-                                    binding.viewError.root.visibility = View.VISIBLE
-                                    binding.viewError.tvError.text = game.message ?: getString(R.string.something_wrong)
-                                }
+                            } else {
+                                isSearch = false
                             }
                         }
                     }
+
                     false
                 }
 
